@@ -1,12 +1,12 @@
 package com.udacity.asteroidradar.repository
 
 import androidx.lifecycle.LiveData
-import com.udacity.asteroidradar.utils.Constants
 import com.udacity.asteroidradar.api.NetworkProvider
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
+import com.udacity.asteroidradar.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -24,22 +24,31 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     val savedAsteroids: LiveData<List<Asteroid>> = database.asteroidDAO.getAllAsteroid()
 
     suspend fun getPictureOfDay(): PictureOfDay {
-        return withContext(Dispatchers.IO) {
-            NetworkProvider.asteroidApiService.getPictureOfDay(
-                apiKey = Constants.API_KEY
-            )
+        return try {
+            withContext(Dispatchers.IO) {
+                NetworkProvider.asteroidApiService.getPictureOfDay(
+                    apiKey = Constants.API_KEY
+                )
+            }
+        } catch (e: java.lang.Exception) {
+            return PictureOfDay()
         }
+
     }
 
     suspend fun refreshAsteroids() {
-        withContext(Dispatchers.IO) {
-            val result = NetworkProvider.asteroidApiService.getNearEarthObjects(
-                startDate = startDate,
-                endDate = endDate,
-                apiKey = Constants.API_KEY
-            )
-            val parseResult = parseAsteroidsJsonResult(JSONObject(result)).toTypedArray()
-            database.asteroidDAO.insertAll(*parseResult)
+        try {
+            withContext(Dispatchers.IO) {
+                val result = NetworkProvider.asteroidApiService.getNearEarthObjects(
+                    startDate = startDate,
+                    endDate = endDate,
+                    apiKey = Constants.API_KEY
+                )
+                val parseResult = parseAsteroidsJsonResult(JSONObject(result)).toTypedArray()
+                database.asteroidDAO.insertAll(*parseResult)
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
         }
     }
 }

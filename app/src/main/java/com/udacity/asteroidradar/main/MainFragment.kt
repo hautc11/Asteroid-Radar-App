@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -48,6 +47,7 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.adapter = adapter
         createOptionMenu()
         viewModel.getPictureOfDay()
+        viewModel.refreshAsteroids()
         return binding.root
     }
 
@@ -69,6 +69,7 @@ class MainFragment : Fragment() {
 
         viewModel.asteroidsView.observe(viewLifecycleOwner) { asteroids ->
             adapter.submitList(asteroids)
+            binding.statusLoadingWheel.isVisible = false
         }
     }
 

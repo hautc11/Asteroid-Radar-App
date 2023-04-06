@@ -34,17 +34,13 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
         }
     }
 
-    init {
-        refreshAsteroids()
-    }
-
     fun getPictureOfDay() {
         viewModelScope.launch {
             _imageOfDay.value = asteroidRepository.getPictureOfDay()
         }
     }
 
-    private fun refreshAsteroids() {
+    fun refreshAsteroids() {
         viewModelScope.launch {
             asteroidRepository.refreshAsteroids()
         }
