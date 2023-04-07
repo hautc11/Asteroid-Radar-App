@@ -6,7 +6,6 @@ import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
-import com.udacity.asteroidradar.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -26,9 +25,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     suspend fun getPictureOfDay(): PictureOfDay {
         return try {
             withContext(Dispatchers.IO) {
-                NetworkProvider.asteroidApiService.getPictureOfDay(
-                    apiKey = Constants.API_KEY
-                )
+                NetworkProvider.asteroidApiService.getPictureOfDay()
             }
         } catch (e: java.lang.Exception) {
             return PictureOfDay()
@@ -41,8 +38,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
             withContext(Dispatchers.IO) {
                 val result = NetworkProvider.asteroidApiService.getNearEarthObjects(
                     startDate = startDate,
-                    endDate = endDate,
-                    apiKey = Constants.API_KEY
+                    endDate = endDate
                 )
                 val parseResult = parseAsteroidsJsonResult(JSONObject(result)).toTypedArray()
                 database.asteroidDAO.insertAll(*parseResult)

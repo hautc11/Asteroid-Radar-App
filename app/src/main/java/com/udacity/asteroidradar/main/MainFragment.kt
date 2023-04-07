@@ -68,7 +68,9 @@ class MainFragment : Fragment() {
         }
 
         viewModel.asteroidsView.observe(viewLifecycleOwner) { asteroids ->
-            adapter.submitList(asteroids)
+            if (asteroids.isNotEmpty()) {
+                adapter.submitList(asteroids)
+            }
             binding.statusLoadingWheel.isVisible = false
         }
     }

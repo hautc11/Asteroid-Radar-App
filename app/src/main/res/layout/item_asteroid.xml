@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:contentDescription="@string/not_hazardous_asteroid_image"
+            android:contentDescription="@{asteroid.isPotentiallyHazardous == true ? @string/potentially_hazardous_asteroid_image : @string/not_hazardous_asteroid_image}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_code_name"
             app:statusIcon="@{asteroid.isPotentiallyHazardous}"
