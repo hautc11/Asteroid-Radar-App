@@ -27,7 +27,7 @@ object NetworkProvider {
                 .request()
                 .url
                 .newBuilder()
-                .addQueryParameter("api_key", BuildConfig.API_KEY)
+                .addQueryParameter("api_key", "QdjTq18cqTTu1OFiWrHwpSCcqzSil10D5qczvr4M")
                 .build()
             chain.proceed(chain.request().newBuilder().url(url).build())
         }
